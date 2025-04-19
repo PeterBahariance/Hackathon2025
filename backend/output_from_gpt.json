@@ -1,9 +1,9 @@
 {
-  "pillName": "Leonardo",
-  "dosage": 1,
-  "frequency": 2,
+  "pillName": null,
+  "dosage": null,
+  "frequency": null,
   "swallowed": false,
   "time1": null,
   "time2": null,
-  "quantity": "49"
+  "quantity": null
 }

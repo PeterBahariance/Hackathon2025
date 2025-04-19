@@ -3,7 +3,12 @@ import pytesseract
 import time
 import re
 import subprocess
+import os
 from pytesseract import Output
+
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+script_dir = os.path.dirname(os.path.abspath(__file__))
+analyze_script = os.path.join(script_dir, "analyze_text.py")
 
 def preprocess_for_ocr(frame, use_clahe=True):
     """Preprocessing with optional CLAHE or simple blur."""
@@ -49,9 +54,9 @@ cap = cv2.VideoCapture(0)
 start_time = time.time()
 last_detection_time = start_time
 ocr_interval = 0.8
-max_run_time = 15
+max_run_time = 30
 min_run_time = 4
-early_stop_gap = 5
+early_stop_gap = 8
 last_ocr_time = 0
 found_text = set()
 last_boxes = []
@@ -121,4 +126,4 @@ else:
 
 # calls the analyze_text.py script now that the txt file has been generate 
 print("🚀 Launching analyze_text.py...")
-subprocess.run(["python", "analyze_text.py"])
+subprocess.run(["python", analyze_script])
