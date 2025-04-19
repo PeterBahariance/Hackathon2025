@@ -20,10 +20,23 @@ const Home = () => {
     const { medications } = mockData;
     const [selectedMed, setSelectedMed] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
+    const [sortedSchedule, setSortedSchedule] = useState([]);
     const navigate = useNavigate();
 
     const handleMedClick = (medication) => {
-        setSelectedMed(medication);
+        console.log('Clicked Medication:', medication); // Debugging
+        console.log('Sorted Schedule:', sortedSchedule); // Debugging
+
+        // Find the next earliest instance in schedule for the same medication
+        const nextInstance = sortedSchedule.find(
+            (instance) =>
+                instance.pillName === medication.pillName &&
+                instance.scheduledTime >= new Date()
+        )
+
+        console.log('Next Instance:', nextInstance); // Debugging
+
+        setSelectedMed(nextInstance || medication); // Fallback to clicked instance
         setModalOpen(true);
     };
 
@@ -137,7 +150,10 @@ const Home = () => {
                     gap: 2
                 }}>
                     <Box sx={{ flex: 1, overflow: 'auto' }}>
-                        <MedicationSchedule handleMedClick={handleMedClick} />
+                        <MedicationSchedule
+                            handleMedClick={handleMedClick} 
+                            onScheduleReady={setSortedSchedule} // Updated callback
+                        />
                     </Box>
                     <Button
                         variant="contained"

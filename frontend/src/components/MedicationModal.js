@@ -35,6 +35,18 @@ const MedicationModal = ({ open, onClose, medication }) => {
                     <Typography variant="body1">
                         Medication details will go here...
                     </Typography>
+                    <Typography>
+                        Dosage: {medication?.dosage}
+                    </Typography>
+                    <Typography>
+                        Next Dosage: {medication?.scheduledTime
+                            ? new Date(medication.scheduledTime).toLocaleTimeString('en-US', {
+                                hour: 'numeric',
+                                minute: '2-digit',
+                                hour12: true,
+                            })
+                            : 'N/A'}
+                    </Typography>
                 </Box>
 
                 <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>

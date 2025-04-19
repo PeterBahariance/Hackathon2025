@@ -4,9 +4,8 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import mockData from '../data/mockData.json';
-import ButtonBase from '@mui/material/ButtonBase';
 
-const MedicationSchedule = ({handleMedClick}) => {
+const MedicationSchedule = ({handleMedClick, onScheduleReady}) => {
     const { medications } = mockData;
     const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -97,6 +96,13 @@ const MedicationSchedule = ({handleMedClick}) => {
     const sortedInstances = [...medicationInstances].sort((a, b) =>
         a.scheduledTime - b.scheduledTime
     );
+
+    // Pass sorted instances to parent ia callback
+    useEffect(() => {
+        if (onScheduleReady) {
+            onScheduleReady(sortedInstances);
+        }
+    }, [sortedInstances, onScheduleReady])
 
     return (
         <Paper elevation={2} sx={{ p: 2 }}>
