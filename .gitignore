@@ -36,10 +36,10 @@ build/
 dist/
 
 # ML
-ml/models/*
-!ml/models/.gitkeep
-ml/data/*
-!ml/data/.gitkeep
+#ml/models/*
+#!ml/models/.gitkeep
+#ml/data/*
+#!ml/data/.gitkeep
 
 # IDE
 .idea/
