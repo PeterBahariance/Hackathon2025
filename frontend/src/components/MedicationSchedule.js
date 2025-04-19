@@ -4,8 +4,9 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import mockData from '../data/mockData.json';
+import ButtonBase from '@mui/material/ButtonBase';
 
-const MedicationSchedule = () => {
+const MedicationSchedule = ({handleMedClick}) => {
     const { medications } = mockData;
     const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -127,6 +128,7 @@ const MedicationSchedule = () => {
                     return (
                         <Paper
                             key={`${instance.pillName}-${instance.instanceTime}`}
+                            onClick={() => handleMedClick(instance)} // Move onClick here
                             elevation={1}
                             sx={{
                                 p: 2,
@@ -135,7 +137,12 @@ const MedicationSchedule = () => {
                                 gridTemplateRows: 'auto 1fr',
                                 borderLeft: `4px solid ${status.color === 'error' ? 'red' :
                                     status.color === 'warning' ? 'orange' :
-                                        status.color === 'info' ? 'blue' : 'green'}`
+                                        status.color === 'info' ? 'blue' : 'green'}`,
+                                cursor: 'pointer',
+                                '&:hover': {
+                                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', // Optional hover effect
+                                },
+                                transition: 'box-shadow 0.2s ease-in-out'
                             }}
                         >
                             <Box sx={{
@@ -166,7 +173,7 @@ const MedicationSchedule = () => {
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        Quantity: {instance.quantity}
+                                        Dosage: {instance.dosage}
                                     </Typography>
                                 </Box>
                                 <Chip

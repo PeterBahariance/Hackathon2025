@@ -137,7 +137,7 @@ const Home = () => {
                     gap: 2
                 }}>
                     <Box sx={{ flex: 1, overflow: 'auto' }}>
-                        <MedicationSchedule />
+                        <MedicationSchedule handleMedClick={handleMedClick} />
                     </Box>
                     <Button
                         variant="contained"
