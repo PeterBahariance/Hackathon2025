@@ -23,10 +23,16 @@ from tensorflow.keras.applications import MobileNet
 
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
 
-#Directories for training data
-local_drug_directory = 'ml\\models\\local_drug_directory'
-train_dir = "ml\\models\\output\\train"
-valid_dir = "ml\\models\\output\\val"
+#Directories for training data (Windows)
+# local_drug_directory = 'ml\\models\\local_drug_directory'
+# train_dir = "ml\\models\\output\\train"
+# valid_dir = "ml\\models\\output\\val"
+
+# Directories for training data (macOS style)
+local_drug_directory = '../ml/models/local_drug_directory'
+train_dir = '../ml/models/output/train'
+valid_dir = '../ml/models/output/val'
+
 
 #Preprocess
 img_height = 224
