@@ -1,5 +1,9 @@
+#Modified model training from:
+# https://github.com/UzmaSayyeda/Pill-Identifier/tree/main
+
 import pandas as pd
 import os
+import json
 
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
@@ -19,16 +23,18 @@ from tensorflow.keras.applications import MobileNet
 
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
 
-# paths
+#Directories for training data
 local_drug_directory = 'ml\\models\\local_drug_directory'
 train_dir = "ml\\models\\output\\train"
 valid_dir = "ml\\models\\output\\val"
 
-# define loading parameters
+#Preprocess
 img_height = 224
 img_width = 224
 batch_size = 1
 
+#ImageDataGenerator is a tensorflow function to
+#automatically generate batches of augmented images during model training
 train_datagen = ImageDataGenerator(rescale=1./255)
 valid_datagen = ImageDataGenerator(rescale=1./255)
 
@@ -40,7 +46,6 @@ train_generator = train_datagen.flow_from_directory(train_dir,
                                                     class_mode="categorical"
                                                    )
 
-# using ImageDataGenerator and flow_from_directory to preprocess the images
 validation_generator = valid_datagen.flow_from_directory(valid_dir,
                                                     target_size=(img_width,img_height),
                                                     batch_size=batch_size,
@@ -48,7 +53,7 @@ validation_generator = valid_datagen.flow_from_directory(valid_dir,
                                                     class_mode="categorical"
                                                    )
 
-# to extract the class names for label
+# Extract class names for labeling
 class_names = train_generator.class_indices.keys()
 class_names
 
@@ -172,5 +177,14 @@ plt.grid(True)
 plt.title('Training and Validation Loss')
 plt.show()
 
-# save the model
+# Save class names in the order they appear in training
+class_names = list(dict(sorted(train_generator.class_indices.items(), key=lambda item: item[1])).keys())
+
+# Save to JSON to easily be included in the pillDetection.py script
+with open("class_names.json", "w") as f:
+    json.dump(class_names, f)
+
+print("Class names saved to class_names.json")
+
+# save the model to be loaded in pillDetection.py
 model.save('../MobileNet.keras')
