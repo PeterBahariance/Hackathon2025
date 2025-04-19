@@ -10,7 +10,7 @@ import openai
 client = openai.OpenAI(api_key="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")  # or use environment variable
 
 # Load OCR text
-with open("detected_text_output.txt", "r") as file:
+with open("../backend/detected_text_output.txt", "r") as file:
     raw_text = file.read()
 
 prompt = f"""

@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import subprocess
 import os
+import json  # 👈 Needed for reading output_from_gpt.json
 import cv2
 import pytesseract
 
@@ -9,7 +10,6 @@ app = Flask(__name__)
 
 # Enable CORS so React (on localhost:3000) can talk to Flask (on port 5050)
 CORS(app, origins="http://localhost:3000")
-
 
 @app.route('/run-script', methods=['GET'])
 def run_script():
@@ -44,6 +44,20 @@ def run_script():
             'message': str(e)
         }), 500
 
+# ✅ New route to get the saved GPT-parsed JSON
+@app.route('/get-parsed-data', methods=['GET'])
+def get_parsed_data():
+    json_path = os.path.join(os.path.dirname(__file__), 'output_from_gpt.json')
+
+    if not os.path.exists(json_path):
+        return jsonify({'status': 'error', 'message': 'Parsed data not found'}), 404
+
+    try:
+        with open(json_path, 'r') as f:
+            parsed_json = json.load(f)
+        return jsonify({'status': 'success', 'data': parsed_json})
+    except Exception as e:
+        return jsonify({'status': 'error', 'message': str(e)}), 500
 
 if __name__ == '__main__':
     # Run Flask on port 5050 so it doesn't collide with React's 3000
