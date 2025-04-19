@@ -2,6 +2,7 @@ import cv2
 import pytesseract
 import time
 import re
+import subprocess
 from pytesseract import Output
 
 def preprocess_for_ocr(frame, use_clahe=True):
@@ -116,3 +117,8 @@ if found_text:
     print("💾 Saved to 'detected_text_output.txt'")
 else:
     print("❗No text was detected.")
+
+
+# calls the analyze_text.py script now that the txt file has been generate 
+print("🚀 Launching analyze_text.py...")
+subprocess.run(["python", "analyze_text.py"])
