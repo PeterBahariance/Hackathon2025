@@ -1,0 +1,14 @@
+[
+  {
+    "frame": 2,
+    "timestamp": "2025-04-18T23:02:46.321819",
+    "motion_score_throat": 116.0,
+    "motion_score_upper": 20.0
+  },
+  {
+    "frame": 91,
+    "timestamp": "2025-04-18T23:02:49.268846",
+    "motion_score_throat": 72.0,
+    "motion_score_upper": 25.0
+  }
+]
