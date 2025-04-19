@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Box, Typography, Paper, Chip } from '@mui/material';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
@@ -52,15 +52,18 @@ const MedicationSchedule = ({handleMedClick, onScheduleReady}) => {
         });
     });
 
-    // Sort all instances by scheduled time
-    const sortedInstances = [...medicationInstances].sort((a, b) =>
-        a.scheduledTime - b.scheduledTime
-    );
+    // Sort all instances by scheduled time, memorize sortedInstances to avoid recalculating on every render
+    const sortedInstances = useMemo(() => {
+        return [...medicationInstances].sort((a, b) => a.scheduledTime - b.scheduledTime);
+    }, [medicationInstances]);
 
-    // Pass sorted instances to parent ia callback
+    // Pass sorted instances to parent via callback
     useEffect(() => {
         if (onScheduleReady) {
-            onScheduleReady(sortedInstances);
+            onScheduleReady((prevSchedule) => {
+                const isSame = JSON.stringify(prevSchedule) === JSON.stringify(sortedInstances);
+                return isSame ? prevSchedule : sortedInstances;
+            });
         }
     }, [sortedInstances, onScheduleReady])
 
