@@ -4,35 +4,11 @@ import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import NightsStayIcon from '@mui/icons-material/NightsStay';
 import mockData from '../data/mockData.json';
+import {FindCurrentTime, formatTime, formatDayAndTime, formatCountdown } from './TimeUtils';
 
 const MedicationSchedule = ({handleMedClick, onScheduleReady}) => {
     const { medications } = mockData;
-    const [currentTime, setCurrentTime] = useState(new Date());
-
-    // Update current time every second
-    useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentTime(new Date());
-        }, 1000);
-        return () => clearInterval(timer);
-    }, []);
-
-    const formatTime = (time) => {
-        if (time instanceof Date) {
-            return time.toLocaleTimeString('en-US', {
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true
-            });
-        } else {
-            // Handle time string (e.g., "08:00")
-            const [hours, minutes] = time.split(':');
-            const hour = parseInt(hours);
-            const ampm = hour >= 12 ? 'PM' : 'AM';
-            const formattedHour = hour % 12 || 12;
-            return `${formattedHour}:${minutes} ${ampm}`;
-        }
-    };
+    const currentTime = FindCurrentTime();
 
     const getTimeOfDayIcon = (time) => {
         const hour = time.getHours();
@@ -53,22 +29,6 @@ const MedicationSchedule = ({handleMedClick, onScheduleReady}) => {
         if (diffMinutes <= 30) return { label: 'Due Soon', color: 'warning' };
         if (diffMinutes <= 60) return { label: 'Upcoming', color: 'info' };
         return { label: 'Scheduled', color: 'success' };
-    };
-
-    const formatCountdown = (ms) => {
-        if (ms <= 0) return 'Now';
-
-        const hours = Math.floor(ms / (1000 * 60 * 60));
-        const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((ms % (1000 * 60)) / 1000);
-
-        if (hours > 0) {
-            return `${hours}h ${minutes}m`;
-        } else if (minutes > 0) {
-            return `${minutes}m ${seconds}s`;
-        } else {
-            return `${seconds}s`;
-        }
     };
 
     // Create an array of all medication instances with their specific times
@@ -115,7 +75,7 @@ const MedicationSchedule = ({handleMedClick, onScheduleReady}) => {
                 borderBottom: '1px solid rgba(0, 0, 0, 0.12)'
             }}>
                 <Typography variant="h6">
-                    Current Time: {formatTime(currentTime)}
+                    Current Time: {formatTime(FindCurrentTime())}
                 </Typography>
             </Box>
             <Box sx={{
@@ -207,7 +167,7 @@ const MedicationSchedule = ({handleMedClick, onScheduleReady}) => {
                                             whiteSpace: 'nowrap'
                                         }}
                                     >
-                                        Scheduled at {formatTime(instance.scheduledTime)}
+                                        Scheduled for {formatDayAndTime(instance.scheduledTime)}
                                     </Typography>
                                     {getTimeOfDayIcon(instance.scheduledTime)}
                                 </Box>
@@ -221,7 +181,7 @@ const MedicationSchedule = ({handleMedClick, onScheduleReady}) => {
                                         whiteSpace: 'nowrap'
                                     }}
                                 >
-                                    Time until next dose: {formatCountdown(timeUntilNext)}
+                                    Time until next dose: {formatCountdown(instance.scheduledTime)}
                                 </Typography>
                             </Box>
                         </Paper>

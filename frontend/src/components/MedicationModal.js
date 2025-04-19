@@ -5,6 +5,7 @@ import {
     Typography,
     Button,
 } from '@mui/material';
+import { formatDayAndTime, formatCountdown } from './TimeUtils';
 
 const style = {
     position: 'absolute',
@@ -40,11 +41,12 @@ const MedicationModal = ({ open, onClose, medication }) => {
                     </Typography>
                     <Typography>
                         Next Dosage: {medication?.scheduledTime
-                            ? new Date(medication.scheduledTime).toLocaleTimeString('en-US', {
-                                hour: 'numeric',
-                                minute: '2-digit',
-                                hour12: true,
-                            })
+                            ? formatDayAndTime(new Date(medication.scheduledTime))
+                            : 'N/A'}
+                    </Typography>
+                    <Typography>
+                        Time until next dose: {medication?.scheduledTime
+                            ? formatCountdown(new Date(medication.scheduledTime))
                             : 'N/A'}
                     </Typography>
                 </Box>

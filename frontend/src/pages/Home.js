@@ -24,18 +24,12 @@ const Home = () => {
     const navigate = useNavigate();
 
     const handleMedClick = (medication) => {
-        console.log('Clicked Medication:', medication); // Debugging
-        console.log('Sorted Schedule:', sortedSchedule); // Debugging
-
         // Find the next earliest instance in schedule for the same medication
         const nextInstance = sortedSchedule.find(
             (instance) =>
                 instance.pillName === medication.pillName &&
                 instance.scheduledTime >= new Date()
         )
-
-        console.log('Next Instance:', nextInstance); // Debugging
-
         setSelectedMed(nextInstance || medication); // Fallback to clicked instance
         setModalOpen(true);
     };
