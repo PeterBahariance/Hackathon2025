@@ -14,13 +14,35 @@ with open("detected_text_output.txt", "r") as file:
     raw_text = file.read()
 
 prompt = f"""
-Here is the raw OCR text from a medicine bottle. Please extract useful information and return it as a structured JSON object with keys like medication, dosage, instructions, patient_name, expiration_date, etc.
+Here is the raw OCR text from a medicine bottle. Please extract useful information and return it as a JSON object in the following structure:
 
+{{
+  "pillName": "Name of the medication (e.g., Metformin)",
+  "dosage": "Number of pills taken per intake (as an integer, e.g., 2 for 'take 2 tablets')",
+  "frequency": "Number of times the medication is to be taken per day (as an integer, e.g., 2 for '2 times daily')",
+  "swallowed": false,
+  "time1": "First time the medication should be taken (in HH:MM 24hr format if specified)",
+  "time2": "Second time the medication should be taken (if applicable)"
+  "quantity" : "Number of tablets in the bottle"
+}}
+
+IMPORTANT:
+- 'dosage' is the number of tablets per intake (like 'Take 1 tablet'), NOT the strength (like '500mg').
+- Ignore any number followed by 'mg' or 'mg.' — that is strength, not dosage.
+- If the frequency is mentioned as 'up to 2 times daily' or '2 times per day', then 'frequency' should be 2.
+- Only include 'time1' or 'time2' if specific clock times are mentioned (like '9am' or '18:00').
+- If 'tablet' is singular and the text says 'take 1 tablet', then 'dosage' should be 1.
+- SPECIFY BOTH TIMES TO NULL UNLESS THERE IS SOMETING CLEAR TO EXIST AS A TIME LIKE '9:00' OR '18:00'
+- Look for number next to symbols such as QTY or quanity for the quantity number 
 OCR Text:
 ---
 {raw_text}
 ---
 """
+
+
+
+
 
 # Call GPT using the new client
 response = client.chat.completions.create(
