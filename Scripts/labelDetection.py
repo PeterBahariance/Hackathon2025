@@ -6,7 +6,10 @@ import subprocess
 import os
 from pytesseract import Output
 
-pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+import pytesseract
+
+# Tell pytesseract where to find the actual binary
+pytesseract.pytesseract.tesseract_cmd = "/opt/homebrew/bin/tesseract"
 script_dir = os.path.dirname(os.path.abspath(__file__))
 analyze_script = os.path.join(script_dir, "analyze_text.py")
 
@@ -54,7 +57,7 @@ cap = cv2.VideoCapture(0)
 start_time = time.time()
 last_detection_time = start_time
 ocr_interval = 0.8
-max_run_time = 30
+max_run_time = 10
 min_run_time = 4
 early_stop_gap = 8
 last_ocr_time = 0
