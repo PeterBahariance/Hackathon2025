@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Typography,
@@ -21,7 +21,25 @@ const Home = () => {
     const [selectedMed, setSelectedMed] = useState(null);
     const [modalOpen, setModalOpen] = useState(false);
     const [sortedSchedule, setSortedSchedule] = useState([]);
+    const [parsedData, setParsedData] = useState(null);
     const navigate = useNavigate();
+
+    // Fetch parsed data when component mounts
+    useEffect(() => {
+        const fetchParsedData = async () => {
+            try {
+                const response = await fetch('http://localhost:5050/get-parsed-data');
+                const data = await response.json();
+                if (data.status === 'success') {
+                    setParsedData(data.data);
+                }
+            } catch (error) {
+                console.error('Error fetching parsed data:', error);
+            }
+        };
+
+        fetchParsedData();
+    }, []);
 
     const handleMedClick = (medication) => {
         // Find the next earliest instance in schedule for the same medication
@@ -105,6 +123,22 @@ const Home = () => {
                         </ListItem>
                     ))}
                 </List>
+
+                {/* Display parsed data if available */}
+                {parsedData && (
+                    <Paper elevation={1} sx={{ p: 2, mt: 2 }}>
+                        <Typography variant="subtitle1" gutterBottom>
+                            Latest Scanned Medicine:
+                        </Typography>
+                        <Typography><strong>Name:</strong> {parsedData.pillName || 'Not specified'}</Typography>
+                        <Typography><strong>Dosage:</strong> {parsedData.dosage}</Typography>
+                        <Typography><strong>Frequency:</strong> {parsedData.frequency}x per day</Typography>
+                        <Typography><strong>Swallowed:</strong> {parsedData.swallowed ? 'Yes' : 'No'}</Typography>
+                        <Typography><strong>Time 1:</strong> {parsedData.time1 || '—'}</Typography>
+                        <Typography><strong>Time 2:</strong> {parsedData.time2 || '—'}</Typography>
+                        <Typography><strong>Quantity:</strong> {parsedData.quantity}</Typography>
+                    </Paper>
+                )}
             </Paper>
 
             {/* Main Content Area */}
@@ -146,9 +180,25 @@ const Home = () => {
                     <Box sx={{ flex: 1, overflow: 'auto' }}>
                         <MedicationSchedule
                             handleMedClick={handleMedClick} 
-                            onScheduleReady={setSortedSchedule} // Updated callback
+                            onScheduleReady={setSortedSchedule}
                         />
                     </Box>
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={() => navigate('/scan-medicine')}
+                        sx={{
+                            borderRadius: '28px',
+                            px: 4,
+                            py: 1.5,
+                            textTransform: 'none',
+                            fontSize: '1.1rem',
+                            width: '100%',
+                            mb: 2
+                        }}
+                    >
+                        Scan Medicine
+                    </Button>
                     <Button
                         variant="contained"
                         color="primary"

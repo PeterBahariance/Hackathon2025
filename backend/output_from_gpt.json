@@ -1,9 +1,9 @@
 {
-  "pillName": "VIBRAMYCIN",
+  "pillName": "",
   "dosage": 3,
-  "frequency": 2,
+  "frequency": 7,
   "swallowed": false,
   "time1": null,
   "time2": null,
-  "quantity": 107
+  "quantity": 1
 }

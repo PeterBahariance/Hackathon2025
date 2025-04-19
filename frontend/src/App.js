@@ -6,6 +6,7 @@ import theme from './styles/theme';
 import Home from './pages/Home';
 import AddMedicine from './pages/AddMedicine';
 import TakeMedicine from './pages/TakeMedicine';
+import ScanMedicine from './pages/ScanMedicine';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/add-medicine" element={<AddMedicine />} />
           <Route path="/take-medicine" element={<TakeMedicine />} />
+          <Route path="/scan-medicine" element={<ScanMedicine />} />
         </Routes>
       </Router>
     </ThemeProvider>
