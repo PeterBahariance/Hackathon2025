@@ -1,14 +1,23 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './styles/theme';
 import Home from './pages/Home';
+import AddMedicine from './pages/AddMedicine';
+import TakeMedicine from './pages/TakeMedicine';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Home />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/add-medicine" element={<AddMedicine />} />
+          <Route path="/take-medicine" element={<TakeMedicine />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
   );
 }
